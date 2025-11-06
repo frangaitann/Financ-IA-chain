@@ -11,11 +11,9 @@
     <li>Logging library for better debug</li>
     <li>GUI for Friendly Use</li>
     <li>Web searching</li>
-    <li>Changing previous poorly made history to a new one with csv and additional uses</li>
     <li>Adding unit testing</li>
     <li>Full linux support</li>
     <li>Adding matplotlib for making graphs</li>
-    <li>re-made web automation with playwright with 0 selenium</li>
   </ul>
 </div>
 

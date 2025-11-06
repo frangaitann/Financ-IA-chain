@@ -1,0 +1,12 @@
+faiss_cpu==1.11.0.post1
+google_search_results==2.4.2
+langchain==1.0.3
+langchain_openai==1.0.2
+langgraph==1.0.2
+pandas==2.3.3
+Pillow==12.0.0
+playwright==1.55.0
+playwright_stealth==2.0.0
+pymupdf==1.26.6
+Requests==2.32.5
+sentence_transformers==5.0.0

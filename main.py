@@ -1,6 +1,5 @@
-from modules.banking import bank_scrapping
-from modules import misc, embedding, web_searching
-import asyncio, os
+import asyncio, os, modules
+from modules.ai import *
 
 
 
@@ -14,8 +13,15 @@ print(r"""  ______ _                        _____                _____ _    _   
  |_|    |_|_| |_|\__,_|_| |_|\___|_____/_/    \_\     \_____|_|  |_/_/    \_\_____|_| \_|
                                                                                          
                                                                                          """)
-asyncio.run(bank_scrapping())
 
+while True:
+    user_input= input("Prompt >> ")
+    asyncio.run(call_ai(user_input))
+    
+#Modify local functions to work being called by IDE's version without commenting the @tool decorator
 
-user_input= input("Prompt >> ")
+# Must re-do the transactions_reading due to non-coherency betwen user's query and embedding output (Just adding filters and many handlers)
 
+# https://medium.com/@abhyankarharshal22/mastering-browser-automation-with-langchain-agent-and-playwright-tools-c70f38fddaa6 This could help with web searching (Its scrapping)
+
+# DEBUG SWITCHER IS IMPLEMENTED BUT WITH NO FUNCTIONS

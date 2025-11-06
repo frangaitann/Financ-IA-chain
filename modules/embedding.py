@@ -1,4 +1,4 @@
-import faiss, json
+import faiss, csv
 from sentence_transformers import SentenceTransformer
 
 
@@ -6,13 +6,13 @@ from sentence_transformers import SentenceTransformer
 
 
 
-# Read history with ONLY required data
+# Read history with just required data (Might be deprecated due to langchain native InMemorySaver())
 def history_reader(user_inp):
     model = SentenceTransformer('all-MiniLM-L6-v2')
 
     try:
         with open("history.csv", "r", encoding="utf-8") as f:
-            data = f.read().splitlines()
+            data = f.read().splitlines()    # CHANGE SPLITLINES 
     except FileNotFoundError:
         data = []
 
@@ -30,7 +30,7 @@ def history_reader(user_inp):
     index.add(vectors.astype('float32'))
 
     prompt_vector = model.encode([user_inp]).astype('float32')
-    D, I = index.search(prompt_vector, k=min(10, len(data)))
+    D, I = index.search(prompt_vector, k=15)
 
     return [data[idx] for idx in I[0]]
 
@@ -41,11 +41,28 @@ def history_reader(user_inp):
 
 # Embedded transactions
 def embedded_transact(user_inp, iter=10):
+    """The embedding function that reads the transactions list and 'chooses' the relevant ones."""
+    
     model = SentenceTransformer('all-MiniLM-L6-v2')
 
-    json_lines = []
+    rows = []
     with open("trans.csv", "r", encoding="utf-8") as f:
-        for i in f:
-            json_lines.append(json.loads(i.strip()))     
+        reader = csv.DictReader(f)
+        for row in reader:
+            rows.append(row)    
 
-    # THIS FUNCTION IS NOT FINISHED, JUST LET IT BE HERE FOR REMEMBERING WHAT TO DO
+    data=[f"{x['Date']} {x['Name']} {x['Amount']}" for x in rows]
+    vectors = model.encode(data, convert_to_numpy=True)
+
+    vec_dimension = vectors.shape[1]
+    index = faiss.IndexFlatL2(vec_dimension)
+    index.add(vectors)
+
+    faiss.write_index(index, "trans.index") 
+    index_read = faiss.read_index("trans.index")
+    
+    prompt_vector = model.encode([str(user_inp)])
+
+    D, I = index_read.search(prompt_vector, k=iter)
+
+    return [data[idx] for idx in I[0]]
