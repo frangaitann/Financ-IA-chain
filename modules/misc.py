@@ -54,19 +54,14 @@ def IPC_getter():
 
 
 
-def token_loader():
-    gpt_token = None
-    deep_token = None
+def token_loader(token: str = "GPT"):
     with open("tokens.jsonl", "r", encoding="utf-8") as f:
         for line in f:
             try:
                 data = json.loads(line.strip())
-                if data.get("model") == "GPT":
-                    gpt_token = data.get("token")
-                    return gpt_token
-                elif data.get("model") == "DEEP":   # WORKS WITH ANY MODEL API KEYS
-                    deep_token = data.get("token")
-                    return deep_token
+                if data.get("model") == token:
+                    main_token = data.get("token")
+                    return main_token
             except json.JSONDecodeError:
                 continue
             
